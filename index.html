@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="暑假工作台">
+  <meta name="theme-color" content="#4A90D9">
+  <link rel="manifest" href="manifest.json">
+  <title>暑假工作台</title>
+  <link rel="stylesheet" href="style.css?v=1">
+</head>
+<body>
+  <div id="app">
+    <!-- 顶部栏 -->
+    <header class="top-bar">
+      <button class="menu-btn" id="menuBtn">☰</button>
+      <div class="top-title">暑假工作台</div>
+      <div class="top-stars">
+        <span class="top-star-icon">⭐</span>
+        <span id="totalStars">0</span>
+      </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="app-main" id="mainContent"></main>
+
+    <!-- 底部导航 -->
+    <nav class="bottom-tab" id="bottomTab"></nav>
+
+    <!-- 侧边抽屉菜单 -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <aside class="drawer" id="drawer">
+      <div class="drawer-header">
+        <div class="drawer-title">📚 暑假工作台</div>
+        <button class="drawer-close" id="drawerClose">✕</button>
+      </div>
+      <nav class="drawer-nav" id="drawerNav"></nav>
+      <div class="drawer-footer">
+        <div class="drawer-stat">
+          <span class="drawer-stat-icon">📅</span>
+          <div>
+            <div class="drawer-stat-num" id="drawerStreak">0</div>
+            <div class="drawer-stat-label">全勤天数</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- 弹窗 -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modalTitle">详情</h2>
+        <button class="modal-close" id="modalClose">✕</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js?v=1"></script>
+</body>
+</html>
