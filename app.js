@@ -1,6 +1,6 @@
 /* ========================================
  * 暑假工作台 · 四升五
- * 架构：分类(chinese/math/english_sport) → 多个打卡项
+ * 架构：分类(chinese/math/english/sport) → 多个打卡项
  * 数据存储：localStorage
  * ======================================== */
 
@@ -272,8 +272,10 @@ const DEFAULT_DATA = {
       {id:'life_math',name:'生活中的数学',icon:'🏠',type:'life_math',stars:2,note:'购物算折扣、测量面积等',records:[]},
       {id:'fun_math',name:'趣味数学',icon:'🎮',type:'fun_math',stars:2,note:'24点、数独、数学谜题',records:[]}
     ],
-    english_sport: [
-      {id:'words',name:'背单词+跟读',icon:'🔤',type:'words',stars:3,note:'每天5个单词+课文跟读',records:[]},
+    english: [
+      {id:'words',name:'背单词+跟读',icon:'🔤',type:'words',stars:3,note:'每天5个单词+课文跟读',records:[]}
+    ],
+    sport: [
       {id:'jump_rope',name:'跳绳',icon:'🏃',type:'timer',timer:30,stars:2,note:'跳绳30分钟',records:[]}
     ]
   },
@@ -371,7 +373,7 @@ function closeDrawer() { document.getElementById('drawerOverlay').classList.remo
 
 function renderNav() {
   const dNav=document.getElementById('drawerNav');
-  const catNames={chinese:'📚 语文',math:'🔢 数学',english_sport:'📝 英语运动'};
+  const catNames={chinese:'📚 语文',math:'🔢 数学',english:'📝 英语',sport:'🏃 运动'};
   let html=`<button class="drawer-item ${currentPage==='home'?'active':''}" onclick="renderPage('home');closeDrawer();"><span class="drawer-icon">🏠</span> 首页</button><div class="drawer-section">分类</div>`;
   for(let k in appData.habits){
     const done=getCatTodayDone(k);
@@ -387,7 +389,8 @@ function renderNav() {
     {key:'home',icon:'🏠',label:'首页'},
     {key:'cat_chinese',icon:'📚',label:'语文'},
     {key:'cat_math',icon:'🔢',label:'数学'},
-    {key:'cat_english_sport',icon:'🏃',label:'英语运动'},
+    {key:'cat_english',icon:'📝',label:'英语'},
+    {key:'cat_sport',icon:'🏃',label:'运动'},
     {key:'rewards',icon:'🎁',label:'奖励'}
   ];
   let bHtml='';
@@ -421,7 +424,7 @@ function renderHome() {
   const allDone=doneCount===total;
 
   let cardsHTML='';
-  const catNames={chinese:'📚 语文',math:'🔢 数学',english_sport:'📝 英语运动'};
+  const catNames={chinese:'📚 语文',math:'🔢 数学',english:'📝 英语',sport:'🏃 运动'};
   for(let k in appData.habits){
     const cat=appData.habits[k];
     const done=getCatTodayDone(k);
@@ -435,7 +438,7 @@ function renderHome() {
       else if(h.type==='fun_math'){meta=getDailyFunMath().type;}
       else if(h.type==='words'){meta='每天5个新单词';}
       else meta=h.note||'';
-      cardsHTML+=`<div class="habit-card ${done?'done':''}" onclick="openHabitDetail('${k}','${h.id}')"><div class="habit-icon cat-${k==='english_sport'?'english':k}">${h.icon}</div><div class="habit-info"><div class="habit-name">${h.name}</div><div class="habit-meta">${meta}</div></div><div class="habit-status ${done?'done':''}">${done?'✓':''}</div>${done?'':`<div class="habit-star">+${h.stars||1}⭐</div>`}</div>`;
+      cardsHTML+=`<div class="habit-card ${done?'done':''}" onclick="openHabitDetail('${k}','${h.id}')"><div class="habit-icon cat-${k==='english'?'english':(k==='sport'?'sport':k)}">${h.icon}</div><div class="habit-info"><div class="habit-name">${h.name}</div><div class="habit-meta">${meta}</div></div><div class="habit-status ${done?'done':''}">${done?'✓':''}</div>${done?'':`<div class="habit-star">+${h.stars||1}⭐</div>`}</div>`;
     });
     cardsHTML+='</div>';
   }
@@ -464,7 +467,7 @@ function renderHome() {
 // ===== 分类页 =====
 function renderCategory(catKey) {
   const cat=appData.habits[catKey];
-  const catNames={chinese:'📚 语文',math:'🔢 数学',english_sport:'📝 英语运动'};
+  const catNames={chinese:'📚 语文',math:'🔢 数学',english:'📝 英语',sport:'🏃 运动'};
   let html='';
   cat.forEach(h=>{
     const done=isCheckedToday(h);
@@ -753,7 +756,7 @@ function renderStats() {
   }
   const weekRate=weekTotal>0?Math.round(weekDone/weekTotal*100):0;
 
-  const catNames={chinese:'📚 语文',math:'🔢 数学',english_sport:'📝 英语运动'};
+  const catNames={chinese:'📚 语文',math:'🔢 数学',english:'📝 英语',sport:'🏃 运动'};
   let catHTML='';
   for(let k in appData.habits){
     const cat=appData.habits[k];
