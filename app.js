@@ -264,8 +264,6 @@ const DEFAULT_DATA = {
   habits: {
     chinese: [
       {id:'poetry',name:'每日古诗',icon:'📜',type:'poetry',stars:3,note:'每天背诵一首古诗',records:[]},
-      {id:'picture_writing',name:'看图写话',icon:'🖼️',type:'check',stars:2,note:'每日一篇看图写话',records:[]},
-      {id:'handwriting',name:'每日练字',icon:'✏️',type:'timer',timer:20,stars:2,note:'练字20分钟',records:[]},
       {id:'reading_comp',name:'每日阅读',icon:'🎙️',type:'record',stars:2,note:'朗读一篇短文并录音，录音完即打卡成功',records:[]},
     ],
     math: [
