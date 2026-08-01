@@ -7,222 +7,38 @@
 const STORAGE_KEY = 'summer_study_v1';
 
 // ===== 古诗库（30首） =====
-const POETRY_BANK = [
-  {title:'静夜思',author:'李白',dynasty:'唐',content:'床前明月光，\n疑是地上霜。\n举头望明月，\n低头思故乡。',translation:'明亮的月光洒在床前，迷蒙中以为是地上的秋霜。抬起头望着明月，低下头思念故乡。',appreciation:'这首诗写的是游子思乡之情，用极其朴素的语言表达了人人共有的情怀。'},
-  {title:'春晓',author:'孟浩然',dynasty:'唐',content:'春眠不觉晓，\n处处闻啼鸟。\n夜来风雨声，\n花落知多少。',translation:'春天的夜晚睡得香甜，不知不觉天就亮了。醒来时到处听到鸟儿的叫声。想起昨夜的风雨声，不知花儿落了多少。',appreciation:'诗人用自然平淡的语言，写出了春日的美好和对花开花落的关切。'},
-  {title:'望庐山瀑布',author:'李白',dynasty:'唐',content:'日照香炉生紫烟，\n遥看瀑布挂前川。\n飞流直下三千尺，\n疑是银河落九天。',translation:'太阳照射的香炉峰升起紫色烟雾，远远望去瀑布像白绢挂在山前。飞腾的水流直冲而下三千尺，仿佛是银河从九天倾泻而下。',appreciation:'用夸张的手法描绘庐山瀑布的壮美，体现了李白诗歌豪放飘逸的风格。'},
-  {title:'山行',author:'杜牧',dynasty:'唐',content:'远上寒山石径斜，\n白云生处有人家。\n停车坐爱枫林晚，\n霜叶红于二月花。',translation:'沿着弯曲的石路远远登上寒山，白云升起的地方有人家居住。停下车是因为喜爱傍晚的枫林，经霜的枫叶比二月的春花还要红艳。',appreciation:'描绘了一幅动人的山林秋色图，"霜叶红于二月花"是千古名句。'},
-  {title:'登鹳雀楼',author:'王之涣',dynasty:'唐',content:'白日依山尽，\n黄河入海流。\n欲穷千里目，\n更上一层楼。',translation:'太阳依着群山缓缓落下，黄河水滚滚流入大海。想要看到千里之外的景色，就要再登上一层楼。',appreciation:'诗中蕴含"站得高才能看得远"的哲理，激励人们不断进取。'},
-  {title:'江雪',author:'柳宗元',dynasty:'唐',content:'千山鸟飞绝，\n万径人踪灭。\n孤舟蓑笠翁，\n独钓寒江雪。',translation:'千山之中飞鸟绝迹，万条路上人迹消失。一只孤舟上穿着蓑衣的老翁，独自在寒江的雪中垂钓。',appreciation:'描绘了一幅幽静寒冷的画面，表现了诗人孤高不屈的品格。'},
-  {title:'咏鹅',author:'骆宾王',dynasty:'唐',content:'鹅，鹅，鹅，\n曲项向天歌。\n白毛浮绿水，\n红掌拨清波。',translation:'鹅啊鹅，弯曲着脖子向天歌唱。洁白的羽毛浮在绿水上，红色的脚掌拨动着清波。',appreciation:'相传为骆宾王七岁所作，用儿童的眼光生动描写了鹅的形态。'},
-  {title:'悯农',author:'李绅',dynasty:'唐',content:'锄禾日当午，\n汗滴禾下土。\n谁知盘中餐，\n粒粒皆辛苦。',translation:'农民在正午烈日下锄禾，汗水滴落在禾苗下的泥土里。谁知道盘中的饭食，每一粒都是辛苦劳动得来的。',appreciation:'告诫人们���珍惜粮食，体会劳动的艰辛。'},
-  {title:'草',author:'白居易',dynasty:'唐',content:'离离原上草，\n一岁一枯荣。\n野火烧不尽，\n春风吹又生。',translation:'原野上的草茂盛地生长，每年枯萎又繁荣。野火无法将它烧尽，春风一吹它又生长出来。',appreciation:'赞美了野草顽强的生命力，也象征着坚韧不拔的精神。'},
-  {title:'池上',author:'白居易',dynasty:'唐',content:'小娃撑小艇，\n偷采白莲回。\n不解藏踪迹，\n浮萍一道开。',translation:'小孩撑着小船，偷偷采了白莲回来。不懂得隐藏踪迹，水面上的浮萍被船划开了一道痕迹。',appreciation:'描写了一个天真可爱的小娃偷采莲蓬的情景，充满童趣。'},
-  {title:'望天门山',author:'李白',dynasty:'唐',content:'天门中断楚江开，\n碧水东流至此回。\n两岸青山相对出，\n孤帆一片日边来。',translation:'天门山被长江从中断开，碧绿的江水东流到此回旋。两岸的青山相对而出，一片孤帆从日边驶来。',appreciation:'描绘了天门山的雄伟和长江的壮阔，展现了大自然的壮美。'},
-  {title:'饮湖上初晴后雨',author:'苏轼',dynasty:'宋',content:'水光潋滟晴方好，\n山色空蒙雨亦奇。\n欲把西湖比西子，\n淡妆浓抹总相宜。',translation:'晴天时水面波光闪动多么美好，雨天时山色朦胧也很奇妙。如果把西湖比作西施，淡妆浓抹都很美丽。',appreciation:'将西湖比作美女西施，写出了西湖不论晴雨都美的特点。'},
-  {title:'绝句',author:'杜甫',dynasty:'唐',content:'两个黄鹂鸣翠柳，\n一行白鹭上青天。\n窗含西岭千秋雪，\n门泊东吴万里船。',translation:'两只黄鹂在翠柳间鸣叫，一行白鹭飞上蓝天。窗户里映着西岭千年不化的积雪，门前停着来自东吴的万里船。',appreciation:'四句诗写了四幅画面，色彩鲜明，动静结合。'},
-  {title:'春夜喜雨',author:'杜甫',dynasty:'唐',content:'好雨知时节，\n当春乃发生。\n随风潜入夜，\n润物细无声。',translation:'好雨知道下雨的时节，春天正是植物萌发的时候。它伴随着春风在夜里悄悄落下，无声地滋润着万物。',appreciation:'赞美了春雨及时而来、默默滋润万物的品格。'},
-  {title:'游子吟',author:'孟郊',dynasty:'唐',content:'慈母手中线，\n游子身上衣。\n临行密密缝，\n意恐迟迟归。\n谁言寸草心，\n报得三春晖。',translation:'慈爱的母亲手中的针线，游子身上的衣服。临行前密密地缝制，担心孩子迟迟不归。谁说小草般的心意，能报答得了春天阳光般的母爱呢？',appreciation:'歌颂了伟大的母爱，表达了游子对母亲的感恩之情。'},
-  {title:'黄鹤楼送孟浩然之广陵',author:'李白',dynasty:'唐',content:'故人西辞黄鹤楼，\n烟花三月下扬州。\n孤帆远影碧空尽，\n唯见长江天际流。',translation:'老朋友在黄鹤楼与我辞别，在柳絮如烟的阳春三月去扬州。孤帆的远影消失在碧空尽头，只看见长江向天边流去。',appreciation:'描写了送别友人的情景，表达了对友人的深情厚谊。'},
-  {title:'鹿柴',author:'王维',dynasty:'唐',content:'空山不见人，\n但闻人语响。\n返景入深林，\n复照青苔上。',translation:'空旷的山中看不见人影，只听到人说话的声音。夕阳的余光射入深林，又照在了青苔上面。',appreciation:'以动衬静，写出了山林的幽静，体现了王维"诗中有画"的特点。'},
-  {title:'早发白帝城',author:'李白',dynasty:'唐',content:'朝辞白帝彩云间，\n千里江陵一日还。\n两岸猿声啼不住，\n轻舟已过万重山。',translation:'早晨告别彩云间的白帝城，千里之外的江陵一天就到了。两岸猿猴的叫声还在回荡，轻快的小船已经穿过了万重山。',appreciation:'描写了长江三峡的壮丽景色和顺流而下船行之快。'},
-  {title:'枫桥夜泊',author:'张继',dynasty:'唐',content:'月落乌啼霜满天，\n江枫渔火对愁眠。\n姑苏城外寒山寺，\n夜半钟声到客船。',translation:'月亮落下乌鸦啼叫寒霜满天，江边枫树和渔火伴着愁眠。姑苏城外的寒山寺，半夜的钟声传到了客船上。',appreciation:'描写了一个游子夜泊枫桥的所见所闻，表达了羁旅之愁。'},
-  {title:'寻隐者不遇',author:'贾岛',dynasty:'唐',content:'松下问童子，\n言师采药去。\n只在此山中，\n云深不知处。',translation:'在松树下问童子，说师父采药去了。就在这座山里，可是云雾弥漫不知道在哪里。',appreciation:'用问答的形式写出了寻访隐者不遇的经过，意境深远。'},
-  {title:'题西林壁',author:'苏轼',dynasty:'宋',content:'横看成岭侧成峰，\n远近高低各不同。\n不识庐山真面目，\n只缘身在此山中。',translation:'横看是山岭侧看是山峰，远近高低看到的各不相同。看不清庐山的真正面目，只因为自己就身在这座山中。',appreciation:'写景中蕴含哲理：当局者迷，旁观者清。'},
-  {title:'夏日绝句',author:'李清照',dynasty:'宋',content:'生当作人杰，\n死亦为鬼雄。\n至今思项羽，\n不肯过江东。',translation:'活着要做人中的豪杰，死了也要做鬼中的英雄。至今人们还在思念项羽，因为他不肯忍辱偷生渡过江东。',appreciation:'借咏史抒发了爱国情怀，表现了诗人刚强的性格。'},
-  {title:'示儿',author:'陆游',dynasty:'宋',content:'死去元知万事空，\n但悲不见九州同。\n王师北定中原日，\n家祭无忘告乃翁。',translation:'人死后原本知道万事皆空，只是悲叹看不到国家统一。当宋朝军队收复中原的那天，家祭时别忘了告诉你的父亲。',appreciation:'这是陆游的绝笔诗，表达了他至死不忘国家统一的爱国之情。'},
-  {title:'元日',author:'王安石',dynasty:'宋',content:'爆竹声中一岁除，\n春风送暖入屠苏。\n千门万户曈曈日，\n总把新桃换旧符。',translation:'爆竹声中旧的一年过去了，春风把暖意送进了屠苏酒。千门万户沐浴着初升的太阳，总是用新的桃符换下旧的桃符。',appreciation:'描写了春节的热闹景象，表达了辞旧迎新的喜悦。'},
-  {title:'泊船瓜洲',author:'王安石',dynasty:'宋',content:'京口瓜洲一水间，\n钟山只隔数重山。\n春风又绿江南岸，\n明月何时照我还。',translation:'京口和瓜洲只隔一条江，钟山也只隔着几重山。春风又吹绿了江南的岸边，明月什么时候照着我回家呢？',appreciation:'"春风又绿江南岸"中的"绿"字用得极为精妙，表达了思��之情。'},
-  {title:'小池',author:'杨万里',dynasty:'宋',content:'泉眼无声惜细流，\n树阴照水爱晴柔。\n小荷才露尖尖角，\n早有蜻蜓立上头。',translation:'泉眼无声地流出细流，好像很珍惜它。树阴映在水面上，好像喜爱这晴天的柔美。小荷叶刚刚露出尖尖的角，早就有蜻蜓停在上面了。',appreciation:'描写了初夏小池的生动景象，充满了生活情趣。'},
-  {title:'晓出净慈寺送林子方',author:'杨万里',dynasty:'宋',content:'毕竟西湖六月中，\n风光不与四时同。\n接天莲叶无穷碧，\n映日荷花别样红。',translation:'到底是西湖的六月，风光与其他时节不同。碧绿的莲叶接天无边无际，阳光下的荷花格外红艳。',appreciation:'描绘了西湖盛夏荷花的壮美景象，色彩鲜明。'},
-  {title:'村居',author:'高鼎',dynasty:'清',content:'草长莺飞二月天，\n拂堤杨柳醉春烟。\n儿童散学归来早，\n忙趁东风放纸鸢。',translation:'二月里草木生长黄莺飞翔，杨柳轻拂着堤岸好像沉醉在春烟中。孩子们放学回来得早，赶忙趁着东风放风筝。',appreciation:'描绘了春天乡村的美丽景色和儿童放风筝的欢乐情景。'},
-  {title:'己亥杂诗',author:'龚自珍',dynasty:'清',content:'九州生气恃风雷，\n万马齐喑究可哀。\n我劝天公重抖擞，\n不拘一格降人才。',translation:'中国的生气勃勃要靠风雷般的变革，万马齐喑的局面实在可悲。我劝老天爷重新振作精神，不要拘泥于常规降下人才来。',appreciation:'表达了诗人对当时社会的不满和对变革的渴望。'},
-  {title:'所见',author:'袁枚',dynasty:'清',content:'牧童骑黄牛，\n歌声振林樾。\n意欲捕鸣蝉，\n忽然闭口立。',translation:'牧童骑着黄牛，歌声振动了树林。忽然想要捕捉鸣叫的蝉，马上闭住嘴站住了。',appreciation:'描写了一个天真活泼的牧童形象，充满生活气息。'}
+// ===== 五年级上册必背内容库（古诗+日积月累+课文段落） =====
+const RECITE_BANK = [
+  // ===== 古诗词 =====
+  {title:'示儿',author:'陆游',dynasty:'宋',type:'古诗',content:'死去元知万事空，\n但悲不见九州同。\n王师北定中原日，\n家祭无忘告乃翁。',translation:'人死后原本知道万事皆空，只是悲叹看不到国家统一。当宋朝军队收复中原的那天，家祭时别忘了告诉你的父亲。',appreciation:'这是陆游的绝笔诗，表达了他至死不忘国家统一的爱国之情。"元知"不要写成"原知"，"九州"不要写成"九洲"。'},
+  {title:'题临安邸',author:'林升',dynasty:'宋',type:'古诗',content:'山外青山楼外楼，\n西湖歌舞几时休？\n暖风熏得游人醉，\n直把杭州作汴州。',translation:'山外有青山楼外有楼，西湖的歌舞什么时候才能停止？暖风把游人熏得醉醺醺的，简直把杭州当成了汴州。',appreciation:'讽刺南宋权贵沉迷享乐、忘记国耻。"熏"不要写成"醺"，"汴州"不要写成"卞州"。'},
+  {title:'己亥杂诗',author:'龚自珍',dynasty:'清',type:'古诗',content:'九州生气恃风雷，\n万马齐喑究可哀。\n我劝天公重抖擞，\n不拘一格降人才。',translation:'中国的生机勃勃需要风雷般的变革，万马齐喑的局面实在可悲。我劝老天爷重新振作，不拘一格降下人才。',appreciation:'表达了对社会变革的渴望。"恃"读shì，"喑"读yīn，不要写成"暗"。"抖擞"不要写成"斗搜"。'},
+  {title:'山居秋暝',author:'王维',dynasty:'唐',type:'古诗',content:'空山新雨后，\n天气晚来秋。\n明月松间照，\n清泉石上流。\n竹喧归浣女，\n莲动下渔舟。\n随意春芳歇，\n王孙自可留。',translation:'空山刚下过雨，傍晚的天气已有秋意。明月透过松林照下，清泉在石上流淌。竹林喧闹是洗衣女归来，莲花摇动是渔船下水。任凭春花凋谢，王孙自可留在此山。',appreciation:'王维山水诗代表作，动静结合。"暝"读míng，傍晚。"浣"读huàn，洗衣。"歇"不要写成"竭"。'},
+  {title:'枫桥夜泊',author:'张继',dynasty:'唐',type:'古诗',content:'月落乌啼霜满天，\n江枫渔火对愁眠。\n姑苏城外寒山寺，\n夜半钟声到客船。',translation:'��亮落下乌鸦啼叫寒霜满天，江边枫树和渔火伴着愁眠。姑苏城外的寒山寺，半夜的钟声传到了客船上。',appreciation:'羁旅思乡的名篇。"乌"不要写成"鸟"，"姑苏"是苏州古称。'},
+  {title:'长相思',author:'纳兰性德',dynasty:'清',type:'词',content:'山一程，水一程，身向榆关那畔行，夜深千帐灯。\n风一更，雪一更，聒碎乡心梦不成，故园无此声。',translation:'翻过一座座山，渡过一条条河，向着山海关那边行进，深夜中千座帐篷灯火通明。风刮一阵，雪下一阵，嘈杂声搅碎了思乡之心，家乡没有这种声音。',appreciation:'清代词人纳兰性德描写行军途中的思乡之情。"榆关"即山海关。"聒"读guō，不要写成"刮"。'},
+  {title:'渔歌子',author:'张志和',dynasty:'唐',type:'词',content:'西塞山前白鹭飞，\n桃花流水鳜鱼肥。\n青箬笠，绿蓑衣，\n斜风细雨不须归。',translation:'西塞山前白鹭飞翔，桃花盛开江水涨，鳜鱼正肥美。头戴青斗笠，身披绿蓑衣，斜风细雨中不必归去。',appreciation:'日积月累篇目。描写渔人自在生活。"鳜"读guì，不要写成"桂"。"箬"读ruò。'},
+  {title:'蝉',author:'虞世南',dynasty:'唐',type:'古诗',content:'垂緌饮清露，\n流响出疏桐。\n居高声自远，\n非是藉秋风。',translation:'蝉垂下触须饮着清露，鸣声从稀疏的梧桐树中传出。身居高处声音自然传得远，不是凭借秋风的力量。',appreciation:'日积月累篇目。借蝉喻人，品德高尚的人不需要外在凭借。"緌"读ruí。'},
+  {title:'乞巧',author:'林杰',dynasty:'唐',type:'古诗',content:'七夕今宵看碧霄，\n牵牛织女渡河桥。\n家家乞巧望秋月，\n穿尽红丝几万条。',translation:'七夕之夜仰望碧蓝的天空，牛郎织女渡过银河相会。家家户户对着秋月乞求巧手，穿完了千万条红丝线。',appreciation:'日积月累篇目。描写七夕乞巧的民间习俗。"霄"不要写成"宵"（第一句的"宵"才是夜晚）。'},
+  {title:'观书有感（其一）',author:'朱熹',dynasty:'宋',type:'古诗',content:'半亩方塘一鉴开，\n天光云影共徘徊。\n问渠那得清如许？\n为有源头活水来。',translation:'半亩方形池塘像一面镜子打开，天光和云影在水中一起徘徊。问它为什么这样清澈？因为有源头的活水不断流来。',appreciation:'日积月累篇目。以池塘为喻，说明不断学习新知识的重要性。"鉴"指镜子。"渠"指它（池塘）。'},
+  {title:'观书有感（其二）',author:'朱熹',dynasty:'宋',type:'古诗',content:'昨夜江边春水生，\n艨艟巨舰一毛轻。\n向来枉费推移力，\n此日中流自在行。',translation:'昨夜江边春水涨起，大战船像羽毛一样轻。以前白费了推移的力气，今天在江中可以自由航行。',appreciation:'以行船为喻，说明积累到一定程度自然水到渠成。"艨艟"读méngchōng，古代战船。'},
+
+  // ===== 日积月累（名言名句） =====
+  {title:'读书名言',author:'',dynasty:'',type:'日积月累',content:'一日无书，百事荒芜。 ——陈寿\n读书破万卷，下笔如有神。 ——杜甫\n书犹药也，善读之可以医愚。 ——刘向',translation:'一天不读书，什么事都做不好。读了很多书后，写文章就像有神助。书就像药一样，善于读书可以医治愚昧。',appreciation:'第一单元日积月累。三条关于读书的名言，分别出自陈寿、杜甫、刘向。'},
+  {title:'勤俭名言',author:'',dynasty:'',type:'日积月累',content:'克勤于邦，克俭于家。 ——《尚书》\n居安思危，戒奢以俭。 ——魏征\n由俭入奢易，由奢入俭难。 ——司马光',translation:'在国家大事上要勤奋，在家庭生活中要节俭。在安定的时候要想到危险，戒除奢侈保持节俭。从节俭到奢侈很容易，从奢侈回到节俭很难。',appreciation:'第四单元日积月累。关于勤俭节约的三条名言。'},
+  {title:'惜时名言',author:'',dynasty:'',type:'日积月累',content:'不饱食以终日，不弃功于寸阴。 ——葛洪\n盛年不重来，一日难再晨。及时当勉励，岁月不待人。 ——陶渊明\n莫等闲，白了少年头，空悲切。 ——岳飞',translation:'不要整天吃饱了无所事事，不要浪费一寸光阴。壮年不会重来，一天不会有两个早晨。应当及时勉励自己，岁月不等人。不要虚度光阴，等头发白了才空自悲伤。',appreciation:'第七单元日积月累。关于珍惜时间的三条名言。"莫等闲"出自岳飞《满江红》。'},
+
+  // ===== 课文必背段落 =====
+  {title:'白鹭（节选）',author:'郭沫若',dynasty:'',type:'课文',content:'在清水田里，时有一只两只白鹭站着钓鱼，整个的田便成了一幅嵌在琉璃框里的画面。田的大小好像是有心人为白鹭设计出的镜匣。\n\n晴天的清晨，每每看见它孤独地站立于小树的绝顶，看来像是不安稳，而它却很悠然。这是别的鸟很难表现的一种嗜好。人们说它是在望哨，可它真是在望哨吗？\n\n黄昏的空中偶见白鹭的低飞，更是乡居生活中的一种恩惠。那是清澄的形象化，而且具有了生命了。',translation:'重点背诵第6-8自然段：描写白鹭在清水田钓鱼、小树顶瞭望、黄昏低飞三个画面，展现白鹭的美。',appreciation:'郭沫若的散文名篇。运用比喻手法，将白鹭比作"精巧的诗"。"琉璃框"比喻清澈的水田。注意"瞭望""恩惠"的写法。'},
+  {title:'落花生（节选）',author:'许地山',dynasty:'',type:'课文',content:'父亲说："花生的好处很多，有一样最可贵：它的果实埋在地里，不像桃子、石榴、苹果那样，把鲜红嫩绿的果实高高地挂在枝头上，使人一见就生爱慕之心。你们看它矮矮地长在地上，等到成熟了，也不能立刻分辨出来它有没有果实，必须挖起来才知道。"\n\n我们都说是，母亲也点点头。\n\n父亲接下去说："所以你们要像花生，它虽然不好看，可是很有用。"\n\n我说："那么，人要做有用的人，不要做只讲体面，而对别人没有好处的人。"',translation:'重点背诵第10-13自然段。父亲用花生做比喻，教育孩子做人要做有用的人，不要只追求外表好看。',appreciation:'借物喻人的写作手法。花生朴实无华却有用，启发我们做人也应如此。"爱慕"的"慕"下部是"小"+"⺗"（心字底变形），不要写错。'},
+  {title:'少年中国说（节选）',author:'梁启超',dynasty:'',type:'课文',content:'故今日之责任，不在他人，而全在我少年。少年智则国智，少年富则国富；少年强则国强，少年独立则国独立；少年自由则国自由；少年进步则国进步；少年胜于欧洲则国胜于欧洲；少年雄于地球则国雄于地球。\n\n红日初升，其道大光。河出伏流，一泻汪洋。潜龙腾渊，鳞爪飞扬。乳虎啸谷，百兽震惶。鹰隼试翼，风尘翕张。奇花初胎，矞矞皇皇。干将发硎，有作其芒。天戴其苍，地履其黄。纵有千古，横有八荒。前途似海，来日方长。\n\n美哉，我少年中国，与天不老！壮哉，我中国少年，与国无疆！',translation:'所以今天的责任不在别人，全在我们少年。少年智慧国家就智慧，少年富强国家就富强……多么美好啊，我少年中国与天不老！多么壮丽啊，我中国少年与国家一样万寿无疆！',appreciation:'梁启超的经典名篇。运用排比、比喻手法，气势磅礴。"隼"读sǔn，"翕"读xī，"矞"读yù，"硎"读xíng。'},
+  {title:'四季之美（节选）',author:'清少纳言',dynasty:'',type:'课文',content:'春天最美是黎明。东方一点儿一点儿泛着鱼肚色的天空，染上微微的红晕，飘着红紫红紫的彩云。\n\n夏天最美是夜晚。明亮的月夜固然美，漆黑漆黑的暗夜，也有无数的萤火虫翩翩飞舞。即使是蒙蒙细雨的夜晚，也有一只两只萤火虫，闪着朦胧的微光在飞行，这情景着实迷人。',translation:'春天最美的是黎明，东方天空泛起鱼肚白，染上红晕。夏天最美的是夜晚，萤火虫在暗夜中翩翩飞舞，着实迷人。',appreciation:'日本作家清少纳言的散文。细腻的观察力和优美的描写。"红晕"的"晕"读yùn。"着实"读zhuóshí。'},
+  {title:'古人谈读书',author:'朱熹等',dynasty:'',type:'课文',content:'余尝谓读书有三到，谓心到、眼到、口到。心不在此，则眼不看仔细，心眼既不专一，却只漫浪诵读，决不能记，记亦不能久也。三到之中，心到最急。心既到矣，眼口岂不到乎？',translation:'我曾经说读书有三到，就是心到、眼到、口到。心不在这里，眼睛就看不仔细。心和眼不专一，只是随便朗读，一定记不住，记住了也不能持久。三到之中，心到最重要。心到了，眼和口怎么会不到呢？',appreciation:'朱熹论读书方法。强调读书要专心致志。"漫浪"指随意、不认真。"岂"表示反问，相当于"怎么"。'}
 ];
 
-// ===== 思维题库（30道） =====
-const MATH_PUZZLE_BANK = [
-  {type:'鸡兔同笼',question:'鸡兔同笼，共有头20个，脚56只，问鸡和兔各有多少只？',answer:'鸡有12只，兔有8只。',steps:'假设全是鸡：20×2=40只脚\n比实际少：56-40=16只脚\n每只兔比鸡多2只脚：4-2=2\n兔的数量：16÷2=8只\n鸡的数量：20-8=12只'},
-  {type:'鸡兔同笼',question:'停车场有汽车和摩托车共35辆，一共有110个轮子。汽车4个轮子，摩托车2个轮子，各有多少辆？',answer:'汽车20辆，摩托车15辆。',steps:'假设全是摩托车：35×2=70个轮子\n比实际少：110-70=40个轮子\n汽车比摩托车多2个轮子：4-2=2\n汽车数量：40÷2=20辆\n摩托车数量：35-20=15辆'},
-  {type:'行程问题',question:'小明从家到学校，每分钟走60米，需要15分钟到达。如果每分钟走75米，需要多少分钟？',answer:'12分钟。',steps:'先求路程：60×15=900米\n再求时间：900÷75=12分钟'},
-  {type:'行程问题',question:'甲乙两车从相距480千米的两地同时相向而行，甲车每小时行60千米，乙车每小时行80千米，几小时后相遇？',answer:'约3.4小时后相遇。',steps:'速度和：60+80=140千米/时\n相遇时间：480÷140≈3.4小时'},
-  {type:'行程问题',question:'一辆汽车上午8时出发，每小时行80千米，下午2时到达目的地。全程多少千米？',answer:'480千米。',steps:'行驶时间：14-8=6小时\n全程：80×6=480千米'},
-  {type:'盈亏问题',question:'把一些苹果分给小朋友，每人分3个多7个，每人分5个少3个。有多少个小朋友？多少个苹果？',answer:'5个小朋友，22个苹果。',steps:'分配差：5-3=2个\n总数差：7+3=10个\n小朋友人数：10÷2=5人\n苹果数：5×3+7=22个'},
-  {type:'盈亏问题',question:'学校给住校生安排宿舍，每间住6人则有4人没地方住，每间住8人则刚好住满。有几间宿舍？多少住校生？',answer:'2间宿舍，16名住校生。',steps:'每间差：8-6=2人\n总数差：4人\n宿舍间数：4÷2=2间\n住校生：2×8=16人'},
-  {type:'盈亏问题',question:'小华买笔记本，买5本还剩12元，买8本还差6元。每本笔记本多少元？小华带了多少钱？',answer:'每本6元，带了42元。',steps:'本数差：8-5=3本\n钱数差：12+6=18元\n每本价格：18÷3=6元\n总钱数：5×6+12=42元'},
-  {type:'年龄问题',question:'爸爸今年36岁，小明今年9岁。再过多少年，爸爸的年龄是小明的2倍？',answer:'18年后。',steps:'设再过x年：36+x=2(9+x)\n36+x=18+2x\nx=18年\n验证：36+18=54，9+18=27，54=27×2 ✓'},
-  {type:'年龄问题',question:'妈妈今年35岁，女儿今年8岁。几年前妈妈的年龄是女儿的6倍？',answer:'5年前。',steps:'年龄差不变：35-8=27岁\n当妈妈是女儿6倍时，女儿年龄：27÷(6-1)=5.4\n近似为5岁\n8-5=3年前\n验证：32÷5≈6.4（近似）\n此题数据为近似解'},
-  {type:'植树问题',question:'在一条长120米的马路一侧种树，每隔6米种一棵，两头都种。一共需要种多少棵树？',answer:'21棵。',steps:'间隔数：120÷6=20\n两头都种：棵数=间隔数+1\n20+1=21棵'},
-  {type:'植树问题',question:'一个圆形花坛周长是60米，每隔3米种一棵月季花。一共需要种多少棵？',answer:'20棵。',steps:'圆形植树：棵数=间隔数\n60÷3=20棵'},
-  {type:'植树问题',question:'一根木头长10米，要锯成每段2米的小段，每锯一次需要3分钟。一共需要多少分钟？',answer:'12分钟。',steps:'段数：10÷2=5段\n锯的次数：5-1=4次\n总时间：4×3=12分钟'},
-  {type:'和差问题',question:'两个数的和是100，差是24。这两个数各是多少？',answer:'大数62，小数38。',steps:'大数：(100+24)÷2=62\n小数：(100-24)÷2=38\n验证：62+38=100 ✓'},
-  {type:'和差问题',question:'甲乙两筐苹果共重80千克，甲筐比乙筐重16千克。两筐各重多少千克？',answer:'甲筐48千克，乙筐32千克。',steps:'甲筐：(80+16)÷2=48千克\n乙筐：(80-16)÷2=32千克'},
-  {type:'和倍问题',question:'书架上上下两层共有书120本，上层书是下层的3倍。两层各有书多少本？',answer:'下层30本，上层90本。',steps:'下层：120÷(3+1)=30本\n上层：30×3=90本'},
-  {type:'和倍问题',question:'果园里梨树和苹果树共240棵，苹果树是梨树的4倍。两种树各有多少棵？',answer:'梨树48棵，苹果树192棵。',steps:'梨树：240÷(4+1)=48棵\n苹果树：48×4=192棵'},
-  {type:'差倍问题',question:'图书馆的故事书比科技书多120本，故事书是科技书的3倍。两种书各有多少本？',answer:'科技书60本，故事书180本。',steps:'科技书：120÷(3-1)=60本\n故事书：60×3=180本'},
-  {type:'差倍问题',question:'哥哥比弟弟大8岁，哥哥的年龄是弟弟的3倍。兄弟各几岁？',answer:'弟弟4岁，哥哥12岁。',steps:'弟弟：8÷(3-1)=4岁\n哥哥：4×3=12岁'},
-  {type:'还原问题',question:'一个数乘以3，再加上12，除以5，等于9。这个数是多少？',answer:'11。',steps:'逆推：9×5=45\n45-12=33\n33÷3=11\n验证：11×3+12=45，45÷5=9 ✓'},
-  {type:'还原问题',question:'小明的零花钱，先用了一半买书，又用了剩下的一半买文具，还剩15元。他原来有多少零花钱？',answer:'60元。',steps:'买文具前有：15×2=30元\n买书前有：30×2=60元'},
-  {type:'还原问题',question:'一个数加上8，乘以3，减去10，等于32。这个数是多少？',answer:'6。',steps:'逆推：(32+10)÷3=14\n14-8=6\n验证：(6+8)×3-10=32 ✓'},
-  {type:'平均数',question:'小红五次数学考试成绩分别是：92、95、88、96、89。平均分是多少？',answer:'92分。',steps:'总分：92+95+88+96+89=460分\n平均分：460÷5=92分'},
-  {type:'平均数',question:'四个数的平均数是25，如果把其中一个数改为18，平均数变成23。这个数原来是多少？',answer:'26。',steps:'原来四个数之和：25×4=100\n现在四个数之和：23×4=92\n差值：100-92=8\n这个数原来：18+8=26'},
-  {type:'页码问题',question:'一本书共120页，小明每天看15页，看了4天后，还剩多少页没看？',answer:'60页。',steps:'已看：15×4=60页\n剩下：120-60=60页'},
-  {type:'页码问题',question:'一本故事书有180页，小红前3天每天看20页，剩下的打算4天看完，每天要看多少页？',answer:'30页。',steps:'已看：20×3=60页\n剩下：180-60=120页\n每天看：120÷4=30页'},
-  {type:'周期问题',question:'有一串彩灯按照"红黄蓝绿红黄蓝绿……"的顺序排列，第37盏灯是什么颜色？',answer:'红色。',steps:'周期：4（红黄蓝绿）\n37÷4=9……1\n余数1对应第一个：红色'},
-  {type:'周期问题',question:'今天是星期三，再过50天是星期几？',answer:'星期四。',steps:'周期：7天\n50÷7=7……1\n星期三+1天=星期四'},
-  {type:'鸡兔同笼',question:'一次数学竞赛共20道题，做对一题得5分，做错一题扣2分。小明得了72分，他做对了几道题？',answer:'16道。',steps:'假设全对：20×5=100分\n比实际多：100-72=28分\n每错一题少得：5+2=7分\n错题数：28÷7=4道\n对题数：20-4=16道'}
-];
-
-// ===== 生活中的数学（15个场景） =====
-const LIFE_MATH_BANK = [
-  {title:'超市购物',task:'去超市买东西，记录5件商品的价格，计算总价。如果用100元付款，找零多少？',hint:'练习加法和减法，注意小数点对齐'},
-  {title:'折扣计算',task:'一件衣服原价120元，打八折后多少钱？一本书25元，买二送一，3本一共多少钱？',hint:'八折=原价×0.8，买二送一只需付2本的钱'},
-  {title:'测量客厅',task:'用卷尺测量客厅的长和宽（米），计算客厅面积。如果每平方米地砖80元，铺满客厅要多少钱？',hint:'面积=长×宽，注意单位换算'},
-  {title:'一周气温',task:'记录本周每天的气温（最高和最低），计算一周平均最高温和平均最低温，画一个统计图。',hint:'平均数=总和÷天数'},
-  {title:'做面包',task:'做面包需要面粉500克、糖30克、酵母5克。如果要做3倍的量，各需要多少？如果只有1.5千克面粉，能做多少份？',hint:'按比例放大，注意单位换算'},
-  {title:'水电费',task:'记录家里上个月用了多少度电，每度电0.6元，计算电费。如果比上月少用20度，省了多少钱？',hint:'电费=度数×单价'},
-  {title:'旅行计划',task:'全家3人去旅行，火车票每人85元，酒店每晚280元住2晚，景点门票每人50元。一共需要多少钱？',hint:'分类计算后相加'},
-  {title:'菜园面积',task:'爷爷的菜园长12米、宽8米。如果每平方米种4棵番茄，一共能种多少棵？每棵收3千克，一共收多少千克？',hint:'先算面积，再算总棵数，最后算总产量'},
-  {title:'跑步训练',task:'小明每天跑800米，一周跑6天。一个月（4周）跑了多少米？合多少千米？',hint:'1000米=1千米'},
-  {title:'比价购物',task:'A超市洗衣液1瓶500ml卖18元，B超市同款1升卖32元。哪家更便宜？',hint:'统一到相同容量再比较'},
-  {title:'存款利息',task:'把500元压岁钱存入银行，年利率2.5%，一年后能得到多少利息？本息一共多少？',hint:'利息=本金×利率×时间'},
-  {title:'看书速度',task:'一本书有210页，小红每天看15页。多少天能看完？如果想在2周内看完，每天至少看多少页？',hint:'两周=14天'},
-  {title:'拼图游戏',task:'一幅拼图有500块，已经拼了180块。还剩多少块？已完成的占总数的百分之几？',hint:'百分比=已完成÷总数×100%'},
-  {title:'时间管理',task:'记录今天各项活动的时间，算出每项用了多少分钟，画一个饼图。',hint:'一天=24小时=1440分钟'},
-  {title:'家庭开支',task:'统计家里一周的伙食费，计算平均每天花多少钱。如果一个月预算2000元够用吗？',hint:'一周×4约等于一个月'}
-];
-
-// ===== 趣味数学（15题） =====
-const FUN_MATH_BANK = [
-  {type:'24点',question:'用2、3、4、8四个数算出24。',answer:'8×(4-3+2)=8×3=24'},
-  {type:'24点',question:'用2、4、6、8四个数算出24。',answer:'8×6÷(4-2)=48÷2=24'},
-  {type:'24点',question:'用3、3、8、8四个数算出24。',answer:'8÷(3-8÷3)=8÷(3-2.667)=8÷0.333=24'},
-  {type:'24点',question:'用1、5、5、5四个数算出24。',answer:'5×(5-1÷5)=5×4.8=24'},
-  {type:'数独',question:'在3×3的格子中填入1-9，使每行、每列、每个对角线的和都相等（幻方）。',answer:'8 1 6\n3 5 7\n4 9 2\n每行/列/对角线和=15',steps:'幻方的中心一定是5，四个角是偶数（2,4,6,8），四个边是奇数（1,3,7,9）'},
-  {type:'数学谜题',question:'用1、2、3、4、5、6、7、8、9这九个数字，每个只用一次，组成三个三位数，使第二个数是第一个数的2倍，第三个数是第一个数的3倍。',answer:'192、384、576。',steps:'192×2=384，192×3=576\n九个数字各不相同 ✓'},
-  {type:'数学谜题',question:'一根绳子对折3次后量了一下是2米。这根绳子原来有多长？',answer:'16米。',steps:'对折3次后变成8层（2×2×2=8）\n原来长：2×8=16米'},
-  {type:'逻辑推理',question:'甲、乙、丙三人中有一人是教师、一人是医生、一人是工程师。已知：①丙比工程师年龄大；②甲和医生不同岁；③医生比乙年龄小。谁是医生？',answer:'丙是医生。',steps:'由③：医生比乙小，所以医生≠乙\n由②：甲≠医生\n所以医生是丙\n甲=工程师，乙=教师，丙=医生'},
-  {type:'逻辑推理',question:'一根竹竿插入水中，湿的部分是60厘米，掉过头来再插入水中，这时湿的部分比全长的三分之一多20厘米。竹竿全长多少？',answer:'120厘米。',steps:'设全长x厘米\n湿的部分不变：60=x/3+20\nx/3=40\nx=120厘米'},
-  {type:'数学谜题',question:'一个数加上100后是一个完全平方数，加上168后也是一个完全平方数。这个数是多少？',answer:'156。',steps:'设两个平方数为a²和b²\nb²-a²=168\n(b-a)(b+a)=168\nb-a=6, b+a=28\nb=17, a=11\n这个数：121-100=21... 验证：21+168=189不是平方数\n修正：b-a=2, b+a=84→b=43,a=41\n41²=1681, 43²=1849\n这个数：1681-100=1581... 太大\n实际答案：156\n156+100=256=16²\n156+168=324=18² ✓'},
-  {type:'数学谜题',question:'一只蜗牛爬一口10米深的井，白天爬3米，晚上滑下2米。几天能爬出井？',answer:'8天。',steps:'每天净爬：3-2=1米\n第7天结束时：7米\n第8天白天爬3米：7+3=10米，到达井口 ✓'},
-  {type:'数独',question:'一个4×4数独：每行、每列、每个2×2宫格内填入1-4不重复。\n□ □ 3 1\n3 □ □ □\n□ 3 □ □\n1 □ □ 3',answer:'2 4 3 1\n3 1 2 4\n4 3 1 2\n1 2 4 3'},
-  {type:'24点',question:'用4、4、10、10四个数算出24。',answer:'(10×10-4)÷4=(100-4)÷4=96÷4=24'},
-  {type:'数学谜题',question:'有一个两位数，十位数字与个位数字之和是9，如果把十位数字和个位数字交换位置，得到的新数比原数大9。原数是多少？',answer:'45。',steps:'设十位a，个位b\na+b=9\n(10b+a)-(10a+b)=9→9b-9a=9→b-a=1\na+b=9, b-a=1→b=5, a=4\n原数：45'}
-];
-
-// ===== 英语单词库（100个四升五核心单词） =====
-const WORD_BANK = [
-  {word:'student',phonetic:'/ˈstjuːdnt/',meaning:'n. 学生',example:'I am a student.'},
-  {word:'teacher',phonetic:'/ˈtiːtʃə/',meaning:'n. 老师',example:'She is a good teacher.'},
-  {word:'school',phonetic:'/skuːl/',meaning:'n. 学校',example:'I go to school every day.'},
-  {word:'classroom',phonetic:'/ˈklɑːsruːm/',meaning:'n. 教室',example:'Our classroom is big.'},
-  {word:'library',phonetic:'/ˈlaɪbrəri/',meaning:'n. 图书馆',example:'I read books in the library.'},
-  {word:'friend',phonetic:'/frend/',meaning:'n. 朋友',example:'He is my best friend.'},
-  {word:'family',phonetic:'/ˈfæməli/',meaning:'n. 家庭',example:'I love my family.'},
-  {word:'father',phonetic:'/ˈfɑːðə/',meaning:'n. 父亲',example:'My father is tall.'},
-  {word:'mother',phonetic:'/ˈmʌðə/',meaning:'n. 母亲',example:'My mother cooks well.'},
-  {word:'brother',phonetic:'/ˈbrʌðə/',meaning:'n. 兄弟',example:'My brother is older than me.'},
-  {word:'sister',phonetic:'/ˈsɪstə/',meaning:'n. 姐妹',example:'My sister likes drawing.'},
-  {word:'breakfast',phonetic:'/ˈbrekfəst/',meaning:'n. 早餐',example:'I have breakfast at 7.'},
-  {word:'lunch',phonetic:'/lʌntʃ/',meaning:'n. 午餐',example:'We have lunch at noon.'},
-  {word:'dinner',phonetic:'/ˈdɪnə/',meaning:'n. 晚餐',example:'Dinner is ready!'},
-  {word:'water',phonetic:'/ˈwɔːtə/',meaning:'n. 水',example:'Please give me some water.'},
-  {word:'milk',phonetic:'/mɪlk/',meaning:'n. 牛奶',example:'I drink milk every morning.'},
-  {word:'bread',phonetic:'/bred/',meaning:'n. 面包',example:'I eat bread for breakfast.'},
-  {word:'apple',phonetic:'/ˈæpl/',meaning:'n. 苹果',example:'An apple a day keeps the doctor away.'},
-  {word:'banana',phonetic:'/bəˈnɑːnə/',meaning:'n. 香蕉',example:'I like bananas.'},
-  {word:'orange',phonetic:'/ˈɒrɪndʒ/',meaning:'n. 橙子',example:'The orange is sweet.'},
-  {word:'book',phonetic:'/bʊk/',meaning:'n. 书',example:'This book is interesting.'},
-  {word:'pen',phonetic:'/pen/',meaning:'n. 钢笔',example:'I write with a pen.'},
-  {word:'pencil',phonetic:'/ˈpensl/',meaning:'n. 铅笔',example:'My pencil is yellow.'},
-  {word:'ruler',phonetic:'/ˈruːlə/',meaning:'n. 尺子',example:'The ruler is 20cm long.'},
-  {word:'bag',phonetic:'/bæɡ/',meaning:'n. 书包',example:'My bag is heavy.'},
-  {word:'chair',phonetic:'/tʃeə/',meaning:'n. 椅子',example:'Sit on the chair, please.'},
-  {word:'desk',phonetic:'/desk/',meaning:'n. 书桌',example:'My desk is near the window.'},
-  {word:'door',phonetic:'/dɔː/',meaning:'n. 门',example:'Please close the door.'},
-  {word:'window',phonetic:'/ˈwɪndəʊ/',meaning:'n. 窗户',example:'Open the window, please.'},
-  {word:'clock',phonetic:'/klɒk/',meaning:'n. 时钟',example:'The clock is on the wall.'},
-  {word:'morning',phonetic:'/ˈmɔːnɪŋ/',meaning:'n. 早晨',example:'Good morning, everyone!'},
-  {word:'afternoon',phonetic:'/ˌɑːftəˈnuːn/',meaning:'n. 下午',example:'Good afternoon!'},
-  {word:'evening',phonetic:'/ˈiːvnɪŋ/',meaning:'n. 傍晚',example:'Good evening!'},
-  {word:'night',phonetic:'/naɪt/',meaning:'n. 夜晚',example:'Good night!'},
-  {word:'today',phonetic:'/təˈdeɪ/',meaning:'n./adv. 今天',example:'Today is Monday.'},
-  {word:'yesterday',phonetic:'/ˈjestədeɪ/',meaning:'n./adv. 昨天',example:'I went there yesterday.'},
-  {word:'tomorrow',phonetic:'/təˈmɒrəʊ/',meaning:'n./adv. 明天',example:'See you tomorrow!'},
-  {word:'week',phonetic:'/wiːk/',meaning:'n. 周',example:'There are 7 days in a week.'},
-  {word:'month',phonetic:'/mʌnθ/',meaning:'n. 月',example:'January is the first month.'},
-  {word:'year',phonetic:'/jɪə/',meaning:'n. 年',example:'A year has 12 months.'},
-  {word:'spring',phonetic:'/sprɪŋ/',meaning:'n. 春天',example:'Flowers bloom in spring.'},
-  {word:'summer',phonetic:'/ˈsʌmə/',meaning:'n. 夏天',example:'It is hot in summer.'},
-  {word:'autumn',phonetic:'/ˈɔːtəm/',meaning:'n. 秋天',example:'Leaves fall in autumn.'},
-  {word:'winter',phonetic:'/ˈwɪntə/',meaning:'n. 冬天',example:'It snows in winter.'},
-  {word:'sunny',phonetic:'/ˈsʌni/',meaning:'adj. 晴天的',example:'It is a sunny day.'},
-  {word:'rainy',phonetic:'/ˈreɪni/',meaning:'adj. 下雨的',example:'It is rainy today.'},
-  {word:'windy',phonetic:'/ˈwɪndi/',meaning:'adj. 有风的',example:'It is windy outside.'},
-  {word:'cloudy',phonetic:'/ˈklaʊdi/',meaning:'adj. 多云的',example:'It is cloudy today.'},
-  {word:'hot',phonetic:'/hɒt/',meaning:'adj. 热的',example:'The water is hot.'},
-  {word:'cold',phonetic:'/kəʊld/',meaning:'adj. 冷的',example:'It is cold in winter.'},
-  {word:'big',phonetic:'/bɪɡ/',meaning:'adj. 大的',example:'The elephant is big.'},
-  {word:'small',phonetic:'/smɔːl/',meaning:'adj. 小的',example:'The mouse is small.'},
-  {word:'long',phonetic:'/lɒŋ/',meaning:'adj. 长的',example:'The snake is long.'},
-  {word:'short',phonetic:'/ʃɔːt/',meaning:'adj. 短的',example:'My hair is short.'},
-  {word:'tall',phonetic:'/tɔːl/',meaning:'adj. 高的',example:'He is very tall.'},
-  {word:'happy',phonetic:'/ˈhæpi/',meaning:'adj. 开心的',example:'I am happy today.'},
-  {word:'sad',phonetic:'/sæd/',meaning:'adj. 伤心的',example:'Don not be sad.'},
-  {word:'hungry',phonetic:'/ˈhʌŋɡri/',meaning:'adj. 饿的',example:'I am hungry.'},
-  {word:'thirsty',phonetic:'/ˈθɜːsti/',meaning:'adj. 渴的',example:'I am thirsty.'},
-  {word:'tired',phonetic:'/ˈtaɪəd/',meaning:'adj. 累的',example:'I am tired after running.'},
-  {word:'run',phonetic:'/rʌn/',meaning:'v. 跑',example:'I can run fast.'},
-  {word:'jump',phonetic:'/dʒʌmp/',meaning:'v. 跳',example:'The frog can jump.'},
-  {word:'swim',phonetic:'/swɪm/',meaning:'v. 游泳',example:'I like to swim.'},
-  {word:'fly',phonetic:'/flaɪ/',meaning:'v. 飞',example:'Birds can fly.'},
-  {word:'walk',phonetic:'/wɔːk/',meaning:'v. 走路',example:'I walk to school.'},
-  {word:'read',phonetic:'/riːd/',meaning:'v. 阅读',example:'I read books every day.'},
-  {word:'write',phonetic:'/raɪt/',meaning:'v. 写',example:'I write a letter.'},
-  {word:'draw',phonetic:'/drɔː/',meaning:'v. 画画',example:'I like to draw.'},
-  {word:'sing',phonetic:'/sɪŋ/',meaning:'v. 唱歌',example:'She sings beautifully.'},
-  {word:'dance',phonetic:'/dɑːns/',meaning:'v. 跳舞',example:'They dance together.'},
-  {word:'play',phonetic:'/pleɪ/',meaning:'v. 玩',example:'Let us play games.'},
-  {word:'eat',phonetic:'/iːt/',meaning:'v. 吃',example:'I eat an apple.'},
-  {word:'drink',phonetic:'/drɪŋk/',meaning:'v. 喝',example:'I drink water.'},
-  {word:'sleep',phonetic:'/sliːp/',meaning:'v. 睡觉',example:'I sleep at 9.'},
-  {word:'watch',phonetic:'/wɒtʃ/',meaning:'v. 观看',example:'I watch TV.'},
-  {word:'listen',phonetic:'/ˈlɪsn/',meaning:'v. 听',example:'Listen to me.'},
-  {word:'speak',phonetic:'/spiːk/',meaning:'v. 说',example:'I can speak English.'},
-  {word:'help',phonetic:'/help/',meaning:'v. 帮助',example:'Can you help me?'},
-  {word:'love',phonetic:'/lʌv/',meaning:'v. 爱',example:'I love you.'},
-  {word:'want',phonetic:'/wɒnt/',meaning:'v. 想要',example:'I want an apple.'},
-  {word:'like',phonetic:'/laɪk/',meaning:'v. 喜欢',example:'I like ice cream.'},
-  {word:'have',phonetic:'/hæv/',meaning:'v. 有',example:'I have a pen.'},
-  {word:'go',phonetic:'/ɡəʊ/',meaning:'v. 去',example:'I go to school.'},
-  {word:'come',phonetic:'/kʌm/',meaning:'v. 来',example:'Come here, please.'},
-  {word:'see',phonetic:'/siː/',meaning:'v. 看见',example:'I see a bird.'},
-  {word:'look',phonetic:'/lʊk/',meaning:'v. 看',example:'Look at the sky.'},
-  {word:'buy',phonetic:'/baɪ/',meaning:'v. 买',example:'I buy a book.'},
-  {word:'make',phonetic:'/meɪk/',meaning:'v. 制作',example:'I make a cake.'},
-  {word:'open',phonetic:'/ˈəʊpən/',meaning:'v. 打开',example:'Open the door.'},
-  {word:'close',phonetic:'/kləʊz/',meaning:'v. 关闭',example:'Close the window.'},
-  {word:'clean',phonetic:'/kliːn/',meaning:'v. 打扫',example:'I clean my room.'},
-  {word:'color',phonetic:'/ˈkʌlə/',meaning:'n. 颜色',example:'What color is it?'},
-  {word:'red',phonetic:'/red/',meaning:'adj. 红色的',example:'The apple is red.'},
-  {word:'blue',phonetic:'/bluː/',meaning:'adj. 蓝色的',example:'The sky is blue.'},
-  {word:'green',phonetic:'/ɡriːn/',meaning:'adj. 绿色的',example:'The grass is green.'},
-  {word:'yellow',phonetic:'/ˈjeləʊ/',meaning:'adj. 黄色的',example:'The sun is yellow.'},
-  {word:'white',phonetic:'/waɪt/',meaning:'adj. 白色的',example:'Snow is white.'},
-  {word:'black',phonetic:'/blæk/',meaning:'adj. 黑色的',example:'The cat is black.'},
-  {word:'animal',phonetic:'/ˈænɪml/',meaning:'n. 动物',example:'I like animals.'},
-  {word:'dog',phonetic:'/dɒɡ/',meaning:'n. 狗',example:'The dog is cute.'},
-  {word:'cat',phonetic:'/kæt/',meaning:'n. 猫',example:'The cat is sleeping.'},
-  {word:'bird',phonetic:'/bɜːd/',meaning:'n. 鸟',example:'The bird is singing.'},
-  {word:'fish',phonetic:'/fɪʃ/',meaning:'n. 鱼',example:'The fish swims fast.'},
-  {word:'beautiful',phonetic:'/ˈbjuːtɪfl/',meaning:'adj. 美丽的',example:'The flower is beautiful.'},
-  {word:'interesting',phonetic:'/ˈɪntrəstɪŋ/',meaning:'adj. 有趣的',example:'The story is interesting.'}
-];
-
-// ===== 每日内容获取函数 =====
-function getDailyPoetry() {
-  const seed = parseInt(todayStr().split('-').join(''));
-  return POETRY_BANK[Math.abs(seed * 7 + seed % 3) % POETRY_BANK.length];
+function getDailyRecite() {
+  const today = todayStr();
+  const seed = parseInt(today.split('-').join(''));
+  return RECITE_BANK[Math.abs(seed * 7 + seed % 3) % RECITE_BANK.length];
 }
 function getDailyPuzzle() {
   const seed = parseInt(todayStr().split('-').join(''));
@@ -263,7 +79,7 @@ function speakWord(word) {
 const DEFAULT_DATA = {
   habits: {
     chinese: [
-      {id:'poetry',name:'每日古诗',icon:'📜',type:'poetry',stars:3,note:'每天背诵一首古诗',records:[]},
+      {id:'poetry',name:'每日背诵',icon:'📜',type:'recite',stars:3,note:'每天背诵五上必背内容',records:[]},
       {id:'reading_comp',name:'每日阅读',icon:'🎙️',type:'record',stars:2,note:'朗读一篇短文并录音，录音完即打卡成功',records:[]},
     ],
     math: [
@@ -439,7 +255,7 @@ function renderHome() {
     cat.forEach(h=>{
       const done=isCheckedToday(h);
       let meta='';
-      if(h.type==='poetry'){meta=getDailyPoetry().title;}
+      if(h.type==='recite'){meta=getDailyRecite().title;}
       else if(h.type==='puzzle'){meta=getDailyPuzzle().type;}
       else if(h.type==='life_math'){meta=getDailyLifeMath().title;}
       else if(h.type==='fun_math'){meta=getDailyFunMath().type;}
@@ -504,8 +320,8 @@ function renderCategory(catKey) {
   cat.forEach(h=>{
     const done=isCheckedToday(h);
     let extra='';
-    if(h.type==='poetry'){
-      const p=getDailyPoetry();
+    if(h.type==='recite'){
+      const p=getDailyRecite();
       extra=`<div style="font-size:12px;color:var(--text-light);margin-top:4px;">今日：${p.title} · ${p.author}</div>`;
     } else if(h.type==='puzzle'){
       const pz=getDailyPuzzle();
@@ -532,15 +348,21 @@ function openHabitDetail(catKey,habitId) {
 
   let contentHTML='';
 
-  if(h.type==='poetry'){
-    const p=getDailyPoetry();
+  if(h.type==='recite'){
+    const p=getDailyRecite();
+    const typeLabel=p.type||'古诗';
+    const typeColor=p.type==='课文'?'var(--primary)':(p.type==='日积月累'?'var(--star)':'var(--accent)');
+    const authorLine=p.author?`【${p.dynasty||''}】${p.author}`:'';
     contentHTML=`<div class="poetry-card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span style="display:inline-block;background:${typeColor};color:#fff;font-size:11px;font-weight:600;padding:2px 10px;border-radius:10px;">${typeLabel}</span>
+      </div>
       <div class="poetry-title">${p.title}</div>
-      <div class="poetry-author">【${p.dynasty}】${p.author}</div>
-      <div class="poetry-content">${p.content.replace(/\n/g,'<br>')}</div>
-      <div class="poetry-section-label">📖 译文</div>
+      ${authorLine?`<div class="poetry-author">${authorLine}</div>`:''}
+      <div class="poetry-content">${p.content.replace(/\\n/g,'<br>')}</div>
+      <div class="poetry-section-label">📖 译文/说明</div>
       <div class="poetry-translation">${p.translation}</div>
-      <div class="poetry-section-label">💡 赏析</div>
+      <div class="poetry-section-label">💡 重点提示</div>
       <div class="poetry-translation">${p.appreciation}</div>
     </div>`;
   } else if(h.type==='puzzle'){
