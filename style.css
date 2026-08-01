@@ -223,6 +223,7 @@ html, body {
 .habit-icon.cat-math { background: linear-gradient(135deg, #7AB8E8, #4A90D9); }
 .habit-icon.cat-english { background: linear-gradient(135deg, #B5E8A0, #7ED957); }
 .habit-icon.cat-sport { background: linear-gradient(135deg, #FF8A80, #FF5252); }
+.habit-icon.cat-habits_good { background: linear-gradient(135deg, #FFD93D, #FFB84D); }
 
 .habit-info { flex: 1; min-width: 0; overflow: hidden; }
 .habit-name { font-size: 15px; font-weight: 600; margin-bottom: 3px; color: var(--text-primary); }

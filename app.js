@@ -277,6 +277,10 @@ const DEFAULT_DATA = {
     ],
     sport: [
       {id:'jump_rope',name:'跳绳',icon:'🏃',type:'timer',timer:30,stars:2,note:'跳绳30分钟',records:[]}
+    ],
+    habits_good: [
+      {id:'clean_room',name:'整理房间',icon:'🛏️',type:'photo',stars:2,note:'拍照上传整理后的房间，打卡',records:[]},
+      {id:'housework',name:'帮助家务',icon:'🧹',type:'photo',stars:2,note:'拍照上传做家务的照片，打卡',records:[]}
     ]
   },
   rewards: [
@@ -375,7 +379,7 @@ function closeDrawer() { document.getElementById('drawerOverlay').classList.remo
 
 function renderNav() {
   const dNav=document.getElementById('drawerNav');
-  const catNames={chinese:'📚 语文',math:'🔢 数学',english:'📝 英语',sport:'🏃 运动'};
+  const catNames={chinese:'📚 语文',math:'🔢 数学',english:'📝 英语',sport:'🏃 运动',habits_good:'🌟 好习惯'};
   let html=`<button class="drawer-item ${currentPage==='home'?'active':''}" onclick="renderPage('home');closeDrawer();"><span class="drawer-icon">🏠</span> 首页</button><div class="drawer-section">分类</div>`;
   for(let k in appData.habits){
     const done=getCatTodayDone(k);
@@ -393,6 +397,7 @@ function renderNav() {
     {key:'cat_math',icon:'🔢',label:'数学'},
     {key:'cat_english',icon:'📝',label:'英语'},
     {key:'cat_sport',icon:'🏃',label:'运动'},
+    {key:'cat_habits_good',icon:'🌟',label:'好习惯'},
     {key:'rewards',icon:'🎁',label:'奖励'}
   ];
   let bHtml='';
@@ -426,7 +431,7 @@ function renderHome() {
   const allDone=doneCount===total;
 
   let cardsHTML='';
-  const catNames={chinese:'📚 语文',math:'🔢 数学',english:'📝 英语',sport:'🏃 运动'};
+  const catNames={chinese:'📚 语文',math:'🔢 数学',english:'📝 英语',sport:'🏃 运动',habits_good:'🌟 好习惯'};
   for(let k in appData.habits){
     const cat=appData.habits[k];
     const done=getCatTodayDone(k);
@@ -440,7 +445,7 @@ function renderHome() {
       else if(h.type==='fun_math'){meta=getDailyFunMath().type;}
       else if(h.type==='words'){meta='每天5个新单词';}
       else meta=h.note||'';
-      cardsHTML+=`<div class="habit-card ${done?'done':''}" onclick="openHabitDetail('${k}','${h.id}')"><div class="habit-icon cat-${k==='english'?'english':(k==='sport'?'sport':k)}">${h.icon}</div><div class="habit-info"><div class="habit-name">${h.name}</div><div class="habit-meta">${meta}</div></div><div class="habit-status ${done?'done':''}">${done?'✓':''}</div>${done?'':`<div class="habit-star">+${h.stars||1}⭐</div>`}</div>`;
+      cardsHTML+=`<div class="habit-card ${done?'done':''}" onclick="openHabitDetail('${k}','${h.id}')"><div class="habit-icon cat-${k==='english'?'english':(k==='sport'?'sport':(k==='habits_good'?'habits_good':k))}">${h.icon}</div><div class="habit-info"><div class="habit-name">${h.name}</div><div class="habit-meta">${meta}</div></div><div class="habit-status ${done?'done':''}">${done?'✓':''}</div>${done?'':`<div class="habit-star">+${h.stars||1}⭐</div>`}</div>`;
     });
     cardsHTML+='</div>';
   }
@@ -494,7 +499,7 @@ function renderHomeCalendar() {
 // ===== 分类页 =====
 function renderCategory(catKey) {
   const cat=appData.habits[catKey];
-  const catNames={chinese:'📚 语文',math:'🔢 数学',english:'📝 英语',sport:'🏃 运动'};
+  const catNames={chinese:'📚 语文',math:'🔢 数学',english:'📝 英语',sport:'🏃 运动',habits_good:'🌟 好习惯'};
   let html='';
   cat.forEach(h=>{
     const done=isCheckedToday(h);
@@ -783,7 +788,7 @@ function renderStats() {
   }
   const weekRate=weekTotal>0?Math.round(weekDone/weekTotal*100):0;
 
-  const catNames={chinese:'📚 语文',math:'🔢 数学',english:'📝 英语',sport:'🏃 运动'};
+  const catNames={chinese:'📚 语文',math:'🔢 数学',english:'📝 英语',sport:'🏃 运动',habits_good:'🌟 好习惯'};
   let catHTML='';
   for(let k in appData.habits){
     const cat=appData.habits[k];
