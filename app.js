@@ -267,7 +267,7 @@ const DEFAULT_DATA = {
       {id:'reading_comp',name:'每日阅读',icon:'🎙️',type:'record',stars:2,note:'朗读一篇短文并录音，录音完即打卡成功',records:[]},
     ],
     math: [
-      {id:'calculation',name:'计算练习',icon:'🔢',type:'timer',timer:20,stars:2,note:'口算+笔算15-20分钟',records:[]},
+      {id:'calculation',name:'计算练习',icon:'📸',type:'photo',stars:2,note:'拍照当日的计算练习上传，上传成功即打卡',records:[]},
       {id:'word_problem',name:'应用题',icon:'📝',type:'check',stars:2,note:'每天2-3道，三色笔标注',records:[]},
       {id:'puzzle',name:'思维拓展题',icon:'🧩',type:'puzzle',stars:3,note:'每天1道浅奥思维题',records:[]},
       {id:'feynman',name:'费曼讲解',icon:'🎤',type:'check',stars:2,note:'把解题思路讲给家长听',records:[]},
@@ -560,6 +560,18 @@ function openHabitDetail(catKey,habitId) {
       </div>
       <audio id="recordAudio" style="display:none;"></audio>
     </div>`;
+  } else if(h.type==='photo'){
+    contentHTML=`<div style="text-align:center;padding:20px 0;">
+      <div style="font-size:56px;margin-bottom:12px;">📸</div>
+      <div style="font-size:15px;color:var(--text-secondary);margin-bottom:16px;">拍照上传当日的计算练习</div>
+      <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none;" onchange="handlePhotoUpload()">
+      <button class="checkin-btn" style="background:linear-gradient(135deg,#4A90D9,#2E6FB5);box-shadow:0 4px 0 #1A5A9E;" onclick="document.getElementById('photoInput').click()">📷 拍照上传</button>
+      <div id="photoPreview" style="display:none;margin-top:14px;">
+        <img id="photoImg" style="max-width:100%;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        <div style="margin-top:10px;color:var(--accent);font-weight:600;">✅ 上传成功！</div>
+        <button class="checkin-btn" style="background:linear-gradient(135deg,var(--accent),var(--accent-dark));box-shadow:0 4px 0 var(--accent-dark);" onclick="submitPhotoCheckin()">✅ 打卡成功</button>
+      </div>
+    </div>`;
   } else {
     contentHTML=`<div style="font-size:14px;color:var(--text-secondary);padding:10px 0;">${h.note||''}</div>`;
   }
@@ -618,6 +630,25 @@ function formatRecordTime(s){
 let pendingRecordCat=null,pendingRecordId=null;
 
 function submitRecordCheckin() {
+  if(pendingRecordCat&&pendingRecordId){
+    doCheckin(pendingRecordCat,pendingRecordId);
+    pendingRecordCat=null;pendingRecordId=null;
+  }
+}
+
+// ===== 拍照功能 =====
+function handlePhotoUpload() {
+  const file=document.getElementById('photoInput').files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    document.getElementById('photoImg').src=e.target.result;
+    document.getElementById('photoPreview').style.display='block';
+  };
+  reader.readAsDataURL(file);
+}
+
+function submitPhotoCheckin() {
   if(pendingRecordCat&&pendingRecordId){
     doCheckin(pendingRecordCat,pendingRecordId);
     pendingRecordCat=null;pendingRecordId=null;
