@@ -321,6 +321,8 @@ function getAllHabits() {
   return r;
 }
 function getCatTodayDone(ck) { return appData.habits[ck].filter(h=>isCheckedToday(h)).length; }
+function getMonthDays(y,m) { return new Date(y,m+1,0).getDate(); }
+
 function calcStreak(records) {
   if (!records||!records.length) return 0;
   const dates=new Set(records.map(r=>r.date));
