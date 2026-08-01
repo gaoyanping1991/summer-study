@@ -266,8 +266,7 @@ const DEFAULT_DATA = {
       {id:'poetry',name:'每日古诗',icon:'📜',type:'poetry',stars:3,note:'每天背诵一首古诗',records:[]},
       {id:'picture_writing',name:'看图写话',icon:'🖼️',type:'check',stars:2,note:'每日一篇看图写话',records:[]},
       {id:'handwriting',name:'每日练字',icon:'✏️',type:'timer',timer:20,stars:2,note:'练字20分钟',records:[]},
-      {id:'reading_comp',name:'阅读理解',icon:'📖',type:'check',stars:1,note:'每日一篇阅读理解',records:[]},
-      {id:'picture_book',name:'绘本阅读',icon:'📚',type:'check',stars:1,note:'每晚绘本故事和阅读',records:[]}
+      {id:'reading_comp',name:'英语阅读录音',icon:'🎙️',type:'record',stars:2,note:'朗读一篇英语短文并录音，录音完即打卡成功',records:[]},
     ],
     math: [
       {id:'calculation',name:'计算练习',icon:'🔢',type:'timer',timer:20,stars:2,note:'口算+笔算15-20分钟',records:[]},
@@ -498,6 +497,8 @@ function openHabitDetail(catKey,habitId) {
   const h=appData.habits[catKey].find(h=>h.id===habitId); if(!h) return;
   const done=isCheckedToday(h);
   const streak=calcStreak(h.records);
+  // 记录当前打开的打卡项（用于录音打卡等需要跨步骤提交的场景）
+  pendingRecordCat=catKey; pendingRecordId=habitId;
 
   let contentHTML='';
 
@@ -549,6 +550,18 @@ function openHabitDetail(catKey,habitId) {
     });
   } else if(h.type==='timer'){
     contentHTML=`<div style="text-align:center;padding:20px;"><div style="font-size:48px;margin-bottom:8px;">⏱️</div><div style="font-size:16px;color:var(--text-secondary);">建议时长：${h.timer}分钟</div></div>`;
+  } else if(h.type==='record'){
+    contentHTML=`<div style="text-align:center;padding:20px 0;">
+      <div style="font-size:56px;margin-bottom:12px;">🎙️</div>
+      <div style="font-size:15px;color:var(--text-secondary);margin-bottom:16px;">朗读完成后点击下方按钮录音</div>
+      <button id="recordBtn" class="checkin-btn" style="background:linear-gradient(135deg,#FF5252,#E53935);box-shadow:0 4px 0 #C62828;" onclick="startRecording()">🔴 开始录音</button>
+      <div id="recordingStatus" style="display:none;margin-top:14px;padding:12px;background:rgba(255,82,82,0.08);border-radius:12px;">
+        <div style="color:#FF5252;font-weight:600;">🔴 正在录音中...</div>
+        <div id="recordTimer" style="font-size:28px;font-weight:800;color:#FF5252;margin:8px 0;">00:00</div>
+        <button class="checkin-btn" style="background:linear-gradient(135deg,#4A90D9,#2E6FB5);box-shadow:0 4px 0 #1A5A9E;" onclick="stopRecording()">⏹️ 停止录音并打卡</button>
+      </div>
+      <audio id="recordAudio" style="display:none;"></audio>
+    </div>`;
   } else {
     contentHTML=`<div style="font-size:14px;color:var(--text-secondary);padding:10px 0;">${h.note||''}</div>`;
   }
@@ -558,9 +571,59 @@ function openHabitDetail(catKey,habitId) {
 
   const btnHTML=done
     ? `<button class="checkin-btn done">✓ 今日已完成</button>`
-    : `<button class="checkin-btn" onclick="doCheckin('${catKey}','${habitId}',event)">✓ 完成打卡（+${h.stars}⭐）</button>`;
+    : (h.type==='record' ? '' : `<button class="checkin-btn" onclick="doCheckin('${catKey}','${habitId}',event)">✓ 完成打卡（+${h.stars}⭐）</button>`);
 
   openModal(`${h.icon} ${h.name}`, statsHTML + contentHTML + btnHTML);
+}
+
+// ===== 录音功能 =====
+let mediaRecorder=null,recordChunks=[],recordTimer=null,recordSeconds=0;
+
+function startRecording() {
+  navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
+    mediaRecorder=new MediaRecorder(stream);
+    recordChunks=[];
+    mediaRecorder.ondataavailable=e=>recordChunks.push(e.data);
+    mediaRecorder.onstop=()=>{
+      const blob=new Blob(recordChunks,{type:'audio/webm'});
+      const url=URL.createObjectURL(blob);
+      const audio=document.getElementById('recordAudio');
+      audio.src=url; audio.style.display='block';
+      document.getElementById('recordingStatus').innerHTML=`<div style="color:var(--accent);font-weight:600;">✅ 录音完成！</div><div style="margin-top:8px;font-size:13px;color:var(--text-secondary);">时长 ${formatRecordTime(recordSeconds)}</div><button class="checkin-btn" style="background:linear-gradient(135deg,var(--accent),var(--accent-dark));box-shadow:0 4px 0 var(--accent-dark);" onclick="submitRecordCheckin()">✅ 打卡成功</button>`;
+      stream.getTracks().forEach(t=>t.stop());
+    };
+    mediaRecorder.start();
+    document.getElementById('recordBtn').style.display='none';
+    document.getElementById('recordingStatus').style.display='block';
+    recordSeconds=0;
+    document.getElementById('recordTimer').textContent='00:00';
+    recordTimer=setInterval(()=>{
+      recordSeconds++;
+      document.getElementById('recordTimer').textContent=formatRecordTime(recordSeconds);
+    },1000);
+  }).catch(()=>{
+    showToast('无法访问麦克风，请检查权限','⚠️');
+  });
+}
+
+function stopRecording() {
+  if(mediaRecorder&&mediaRecorder.state==='recording'){
+    mediaRecorder.stop(); clearInterval(recordTimer);
+  }
+}
+
+function formatRecordTime(s){
+  const m=Math.floor(s/60),sec=s%60;
+  return String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+}
+
+let pendingRecordCat=null,pendingRecordId=null;
+
+function submitRecordCheckin() {
+  if(pendingRecordCat&&pendingRecordId){
+    doCheckin(pendingRecordCat,pendingRecordId);
+    pendingRecordCat=null;pendingRecordId=null;
+  }
 }
 
 // ===== 打卡操作 =====
