@@ -443,18 +443,12 @@ function renderHome() {
     cardsHTML+='</div>';
   }
 
+  // 当月日历
+  let calHTML=renderHomeCalendar();
+
   return `<div class="hero-card">
     <div class="hero-date">${getTodayDisplay()}</div>
-    <div class="hero-progress-ring">
-      <svg width="120" height="120">
-        <circle class="progress-bg" cx="60" cy="60" r="50" fill="none" stroke-width="8"/>
-        <circle class="progress-bar" cx="60" cy="60" r="50" fill="none" stroke-width="8" stroke-dasharray="${circumference}" stroke-dashoffset="${dashOffset}"/>
-      </svg>
-      <div class="hero-progress-text">
-        <div class="hero-progress-num">${doneCount}</div>
-        <div class="hero-progress-total">/ ${total}</div>
-      </div>
-    </div>
+    ${calHTML}
     <div class="hero-stars-row">
       <div class="hero-star-item"><div class="hero-star-num">${todayStars}</div><div class="hero-star-label">今日星星</div></div>
       <div class="hero-star-item"><div class="hero-star-num">${appData.totalStars}</div><div class="hero-star-label">累计星星</div></div>
@@ -462,6 +456,37 @@ function renderHome() {
     </div>
     ${allDone&&doneCount>0?'<div style="margin-top:12px;font-size:16px;position:relative;z-index:1;">🎉 今天全部完成啦！太棒了！</div>':''}
   </div>${cardsHTML}`;
+}
+
+// ===== 首页月历 =====
+function renderHomeCalendar() {
+  const now=new Date(); const y=now.getFullYear(),m=now.getMonth();
+  const dim=getMonthDays(y,m); const fd=new Date(y,m,1).getDay()||7;
+  const today=todayStr();
+  const habits=getAllHabits();
+  // 收集所有打卡日期
+  const allDates={};
+  habits.forEach(h=>{
+    h.records.forEach(r=>{allDates[r.date]=(allDates[r.date]||0)+1;});
+  });
+  const maxCount=Math.max(1,...Object.values(allDates));
+  const wh=['一','二','三','四','五','六','日'];
+  let h='<div class="home-calendar">';
+  h+='<div class="home-cal-header">'+wh.map(d=>`<span>${d}</span>`).join('')+'</div>';
+  h+='<div class="home-cal-grid">';
+  for(let i=1;i<fd;i++) h+='<div class="home-cal-day empty"></div>';
+  for(let d=1;d<=dim;d++){
+    const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const count=allDates[ds]||0;
+    const intensity=count>0?Math.min(1,0.3+(count/maxCount)*0.7):0;
+    let cls='home-cal-day';
+    if(count>0) cls+=' has-checkin';
+    if(ds===today) cls+=' today';
+    const bg=count>0?`rgba(126,217,87,${intensity})`:'rgba(255,255,255,0.15)';
+    h+=`<div class="${cls}" style="background:${bg}"><span>${d}</span></div>`;
+  }
+  h+='</div></div>';
+  return h;
 }
 
 // ===== 分类页 =====
