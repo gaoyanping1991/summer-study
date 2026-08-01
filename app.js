@@ -281,7 +281,7 @@ const DEFAULT_DATA = {
   },
   rewards: [
     {id:'r1',icon:'🍦',name:'吃冰淇淋',cost:15},
-    {id:'r2',icon:'📺',name:'看动画片30分钟',cost:20},
+    {id:'r2',icon:'📺',name:'看电视30分钟',cost:20},
     {id:'r3',icon:'📚',name:'买一本书',cost:50},
     {id:'r4',icon:'🎮',name:'自由玩耍1小时',cost:30},
     {id:'r5',icon:'🎢',name:'去游乐园',cost:100}
