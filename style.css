@@ -204,6 +204,59 @@ html, body {
 .hero-star-num { font-size: 22px; font-weight: 800; }
 .hero-star-label { font-size: 11px; opacity: 0.85; }
 
+/* ===== 今日任务清单 ===== */
+.todo-card {
+  background: #fff; border-radius: var(--radius); padding: 16px;
+  box-shadow: var(--shadow); margin-bottom: 14px;
+}
+.todo-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px; padding-bottom: 10px;
+  border-bottom: 2px dashed var(--border);
+}
+.todo-title { font-size: 15px; font-weight: 700; color: #333; }
+.todo-count {
+  background: var(--primary); color: #fff;
+  font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 12px;
+}
+.todo-list { display: flex; flex-direction: column; gap: 6px; }
+.todo-item {
+  display: flex; align-items: center; gap: 10px; padding: 10px 8px;
+  border-radius: 10px; cursor: pointer; transition: all 0.15s;
+  border: 1px solid transparent;
+}
+.todo-item:active { transform: scale(0.98); background: #f5f8ff; }
+.todo-item.done {
+  background: linear-gradient(135deg, rgba(126,217,87,0.08), rgba(181,232,160,0.08));
+  border-color: rgba(126,217,87,0.2);
+}
+.todo-check {
+  width: 26px; height: 26px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; flex-shrink: 0;
+  border: 2px solid #ddd; color: #bbb; background: #fff;
+}
+.todo-item.done .todo-check {
+  background: var(--accent); color: #fff; border-color: var(--accent);
+}
+.todo-icon {
+  width: 34px; height: 34px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; flex-shrink: 0; color: #fff;
+}
+.todo-info { flex: 1; min-width: 0; }
+.todo-name { font-size: 14px; font-weight: 600; color: #333; }
+.todo-item.done .todo-name { text-decoration: line-through; color: #999; }
+.todo-meta {
+  font-size: 11px; color: #999; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.todo-stars { font-size: 12px; font-weight: 700; color: var(--star); flex-shrink: 0; }
+.todo-arrow {
+  font-size: 20px; color: #ccc; flex-shrink: 0;
+  font-weight: 300;
+}
+
 /* ===== 打卡项卡片 ===== */
 .habit-card {
   display: flex; align-items: center; padding: 14px;

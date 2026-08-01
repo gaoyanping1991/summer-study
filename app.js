@@ -269,6 +269,49 @@ function renderHome() {
   // 当月日历
   let calHTML=renderHomeCalendar();
 
+  // 今日任务清单
+  const todoItems=[];
+  for(let k in appData.habits){
+    appData.habits[k].forEach(h=>{
+      const done=isCheckedToday(h);
+      let meta='';
+      if(h.type==='recite'){meta=getDailyRecite().title;}
+      else if(h.type==='puzzle'){meta=getDailyPuzzle().type;}
+      else if(h.type==='life_math'){meta=getDailyLifeMath().title;}
+      else if(h.type==='fun_math'){meta=getDailyFunMath().type;}
+      else if(h.type==='words'){meta='每天5个新单词';}
+      else meta=h.note||'';
+      todoItems.push({catKey:k,id:h.id,name:h.name,icon:h.icon,done,meta,stars:h.stars||1});
+    });
+  }
+  const doneItems=todoItems.filter(t=>t.done);
+  const undoneItems=todoItems.filter(t=>!t.done);
+
+  let todoHTML='<div class="todo-card"><div class="todo-header"><span class="todo-title">📋 今日任务</span><span class="todo-count">${doneCount}/${total}</span></div><div class="todo-list">';
+
+  // 已完成项
+  doneItems.forEach(t=>{
+    const catColor={chinese:'#4A90D9',math:'#FF9500',english:'#E91E63',sport:'#34C759',habits_good:'#FF9500'};
+    todoHTML+=`<div class="todo-item done" onclick="openHabitDetail('${t.catKey}','${t.id}')">
+      <div class="todo-check">✓</div>
+      <div class="todo-icon" style="background:${catColor[t.catKey]||'#4A90D9'}">${t.icon}</div>
+      <div class="todo-info"><div class="todo-name">${t.name}</div><div class="todo-meta">${t.meta}</div></div>
+      <div class="todo-stars">+${t.stars}⭐</div>
+    </div>`;
+  });
+  // 未完成项
+  undoneItems.forEach(t=>{
+    const catColor={chinese:'#4A90D9',math:'#FF9500',english:'#E91E63',sport:'#34C759',habits_good:'#FF9500'};
+    todoHTML+=`<div class="todo-item" onclick="openHabitDetail('${t.catKey}','${t.id}')">
+      <div class="todo-check">${t.stars}</div>
+      <div class="todo-icon" style="background:${catColor[t.catKey]||'#4A90D9'}">${t.icon}</div>
+      <div class="todo-info"><div class="todo-name">${t.name}</div><div class="todo-meta">${t.meta}</div></div>
+      <div class="todo-arrow">›</div>
+    </div>`;
+  });
+
+  todoHTML+='</div></div>';
+
   return `<div class="hero-card">
     <div class="hero-date">${getTodayDisplay()}</div>
     ${calHTML}
@@ -278,7 +321,9 @@ function renderHome() {
       <div class="hero-star-item"><div class="hero-star-num">${calcTotalStreak()}</div><div class="hero-star-label">全勤天数</div></div>
     </div>
     ${allDone&&doneCount>0?'<div style="margin-top:12px;font-size:16px;position:relative;z-index:1;">🎉 今天全部完成啦！太棒了！</div>':''}
-  </div>${cardsHTML}`;
+  </div>
+  ${todoHTML}
+  ${cardsHTML}`;
 }
 
 // ===== 首页月历 =====
