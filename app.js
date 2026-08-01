@@ -433,9 +433,16 @@ function openHabitDetail(catKey,habitId) {
   // 统计
   let statsHTML=`<div style="display:flex;justify-content:space-around;margin-bottom:16px;padding-bottom:12px;border-bottom:1px dashed var(--border);"><div style="text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--primary);">${streak}</div><div style="font-size:11px;color:var(--text-secondary);">连续天数</div></div><div style="text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--primary);">${h.records.length}</div><div style="font-size:11px;color:var(--text-secondary);">累计次数</div></div><div style="text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--star);">${h.stars}⭐</div><div style="font-size:11px;color:var(--text-secondary);">每次奖励</div></div></div>`;
 
-  const btnHTML=done
-    ? `<button class="checkin-btn done">✓ 今日已完成</button>`
-    : (h.type==='record' ? '' : `<button class="checkin-btn" onclick="doCheckin('${catKey}','${habitId}',event)">✓ 完成打卡（+${h.stars}⭐）</button>`);
+  let btnHTML='';
+  if(done){
+    btnHTML=`<button class="checkin-btn done">✓ 今日已完成</button>`;
+  } else if(h.type==='recite'){
+    btnHTML=`<button class="checkin-btn" style="background:linear-gradient(135deg,#6C5CE7,#A29BFE);box-shadow:0 4px 0 #5A4BD1;" onclick="startReciteQuiz('${catKey}','${habitId}')">📝 背诵测验（填空验证）</button>`;
+  } else if(h.type==='record'){
+    btnHTML='';
+  } else {
+    btnHTML=`<button class="checkin-btn" onclick="doCheckin('${catKey}','${habitId}',event)">✓ 完成打卡（+${h.stars}⭐）</button>`;
+  }
 
   openModal(`${h.icon} ${h.name}`, statsHTML + contentHTML + btnHTML);
 }
@@ -507,6 +514,115 @@ function submitPhotoCheckin() {
     doCheckin(pendingRecordCat,pendingRecordId);
     pendingRecordCat=null;pendingRecordId=null;
   }
+}
+
+
+// ===== 背诵测验 =====
+let reciteQuiz=null;
+
+function startReciteQuiz(catKey,habitId) {
+  const p=getDailyRecite();
+  const text=p.content.replace(/\\n/g,"\n");
+  const words=[];
+  const lines=text.split("\n").filter(l=>l.trim());
+  lines.forEach(line=>{
+    const matches=line.match(/[\u4e00-\u9fa5]{2,6}/g);
+    if(matches) words.push(...matches);
+  });
+  const unique=[...new Set(words)];
+  const selected=[];
+  const pool=[...unique];
+  for(let i=0;i<3&&pool.length>0;i++){
+    const idx=Math.floor(Math.random()*pool.length);
+    selected.push(pool.splice(idx,1)[0]);
+  }
+  if(selected.length<2) selected.push(...unique.filter(w=>!selected.includes(w)).slice(0,3-selected.length));
+  
+  reciteQuiz={catKey,habitId,selected,score:0,current:0,answered:[]};
+  renderReciteQuestion();
+}
+
+function renderReciteQuestion() {
+  if(!reciteQuiz) return;
+  const q=reciteQuiz;
+  const total=q.selected.length;
+  const idx=q.current;
+  const word=q.selected[idx];
+  const p=getDailyRecite();
+  const fullText=p.content.replace(/\\n/g,"\n");
+  const maskedText=fullText.replace(new RegExp(word,"g"),"（    ）");
+  
+  openModal("📝 背诵填空 "+(idx+1)+"/"+total,
+    "<div style=\"margin-bottom:14px;\"><div class=\"quiz-progress-bar\"><div class=\"quiz-progress-fill\" style=\"width:"+Math.round(idx/total*100)+"%\"></div></div></div>"+
+    "<div class=\"poetry-card\" style=\"margin-bottom:14px;\"><div style=\"font-size:15px;line-height:2.2;color:var(--text-primary);\">"+maskedText.replace(/\n/g,"<br>")+"</div></div>"+
+    "<div style=\"text-align:center;margin-bottom:12px;font-size:14px;color:var(--text-secondary);\">请填入括号中缺少的词语：</div>"+
+    "<div class=\"form-group\"><input type=\"text\" class=\"form-input\" id=\"reciteAnswer\" placeholder=\"输入你的答案\" style=\"text-align:center;font-size:18px;font-weight:700;\" autocomplete=\"off\"></div>"+
+    "<button class=\"checkin-btn\" style=\"background:linear-gradient(135deg,#6C5CE7,#A29BFE);box-shadow:0 4px 0 #5A4BD1;\" onclick=\"submitReciteAnswer()\">提交答案</button>"+
+    "<div id=\"reciteFeedback\" style=\"display:none;text-align:center;padding:12px;margin-top:10px;border-radius:12px;\"></div>"
+  );
+}
+
+function submitReciteAnswer() {
+  if(!reciteQuiz) return;
+  const input=document.getElementById("reciteAnswer").value.trim();
+  const q=reciteQuiz;
+  const correct=q.selected[q.current];
+  const isCorrect=input===correct;
+  
+  if(isCorrect) reciteQuiz.score++;
+  reciteQuiz.answered.push({word:correct,userInput:input,correct:isCorrect});
+  
+  const fb=document.getElementById("reciteFeedback");
+  fb.style.display="block";
+  if(isCorrect){
+    fb.style.background="rgba(126,217,87,0.1)";
+    fb.innerHTML="<div style=\"font-size:32px;\">✅</div><div style=\"color:var(--accent-dark);font-weight:600;\">正确！答案是\""+correct+"\"</div>";
+  } else {
+    fb.style.background="rgba(255,138,128,0.1)";
+    fb.innerHTML="<div style=\"font-size:32px;\">❌</div><div style=\"color:var(--danger);font-weight:600;\">正确答案是\""+correct+"\"</div><div style=\"font-size:13px;color:var(--text-secondary);\">你填的是\""+(input||"（空）")+"\"</div>";
+  }
+  
+  const btns=document.querySelectorAll("#modalBody .checkin-btn");
+  btns[btns.length-1].disabled=true;
+  document.getElementById("reciteAnswer").disabled=true;
+  
+  setTimeout(()=>{
+    reciteQuiz.current++;
+    if(reciteQuiz.current<reciteQuiz.selected.length){
+      renderReciteQuestion();
+    } else {
+      showReciteResult();
+    }
+  },1500);
+}
+
+function showReciteResult() {
+  if(!reciteQuiz) return;
+  const total=reciteQuiz.selected.length;
+  const score=reciteQuiz.score;
+  const passed=score>=2;
+  
+  if(passed){
+    const h=appData.habits[reciteQuiz.catKey].find(h=>h.id===reciteQuiz.habitId);
+    if(!isCheckedToday(h)){
+      doCheckin(reciteQuiz.catKey,reciteQuiz.habitId);
+    }
+  }
+  
+  let html="<div style=\"text-align:center;margin-bottom:16px;\"><div style=\"font-size:56px;\">"+(passed?"🎉":"😅")+"</div><div style=\"font-size:26px;font-weight:800;color:"+(passed?"var(--accent)":"var(--danger)")+";\">"+score+"/"+total+" 正确</div><div style=\"font-size:14px;color:var(--text-secondary);margin-top:4px;\">"+(passed?"背诵通过！打卡成功！":"还需加强背诵，再来一次吧！")+"</div></div>";
+  
+  html+="<div style=\"margin-bottom:12px;font-size:13px;font-weight:600;\">📋 答题详情</div>";
+  reciteQuiz.answered.forEach((a,i)=>{
+    html+="<div style=\"padding:10px 12px;margin-bottom:6px;background:"+(a.correct?"rgba(126,217,87,0.08)":"rgba(255,138,128,0.08)")+";border-radius:10px;display:flex;align-items:center;gap:10px;\"><div>"+(a.correct?"✅":"❌")+"</div><div style=\"flex:1;\"><b>"+a.word+"</b>"+(!a.correct?" → 你填了\""+(a.userInput||"空")+"\"":"")+"</div></div>";
+  });
+  
+  html+=passed
+    ? "<button class=\"checkin-btn\" onclick=\"closeModal();renderPage('home');\">✅ 完成</button>"
+    : "<button class=\"checkin-btn\" onclick=\"closeModal();startReciteQuiz('"+reciteQuiz.catKey+"','"+reciteQuiz.habitId+"')\">🔄 再来一次</button><button class=\"checkin-btn\" style=\"background:var(--text-light);margin-top:8px;\" onclick=\"closeModal();\">先回去复习</button>";
+  
+  const ck=reciteQuiz.catKey,hid=reciteQuiz.habitId;
+  reciteQuiz=null;
+  openModal("📝 背诵结果",html);
 }
 
 // ===== 打卡操作 =====
