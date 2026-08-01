@@ -266,7 +266,7 @@ const DEFAULT_DATA = {
       {id:'poetry',name:'每日古诗',icon:'📜',type:'poetry',stars:3,note:'每天背诵一首古诗',records:[]},
       {id:'picture_writing',name:'看图写话',icon:'🖼️',type:'check',stars:2,note:'每日一篇看图写话',records:[]},
       {id:'handwriting',name:'每日练字',icon:'✏️',type:'timer',timer:20,stars:2,note:'练字20分钟',records:[]},
-      {id:'reading_comp',name:'英语阅读录音',icon:'🎙️',type:'record',stars:2,note:'朗读一篇英语短文并录音，录音完即打卡成功',records:[]},
+      {id:'reading_comp',name:'每日阅读',icon:'🎙️',type:'record',stars:2,note:'朗读一篇短文并录音，录音完即打卡成功',records:[]},
     ],
     math: [
       {id:'calculation',name:'计算练习',icon:'🔢',type:'timer',timer:20,stars:2,note:'口算+笔算15-20分钟',records:[]},
