@@ -268,15 +268,12 @@ const DEFAULT_DATA = {
     ],
     math: [
       {id:'calculation',name:'计算练习',icon:'📸',type:'photo',stars:2,note:'拍照当日的计算练习上传，上传成功即打卡',records:[]},
-      {id:'word_problem',name:'应用题',icon:'📝',type:'check',stars:2,note:'每天2-3道，三色笔标注',records:[]},
       {id:'puzzle',name:'思维拓展题',icon:'🧩',type:'puzzle',stars:3,note:'每天1道浅奥思维题',records:[]},
-      {id:'feynman',name:'费曼讲解',icon:'🎤',type:'check',stars:2,note:'把解题思路讲给家长听',records:[]},
       {id:'life_math',name:'生活中的数学',icon:'🏠',type:'life_math',stars:2,note:'购物算折扣、测量面积等',records:[]},
       {id:'fun_math',name:'趣味数学',icon:'🎮',type:'fun_math',stars:2,note:'24点、数独、数学谜题',records:[]}
     ],
     english_sport: [
       {id:'words',name:'背单词+跟读',icon:'🔤',type:'words',stars:3,note:'每天5个单词+课文跟读',records:[]},
-      {id:'listening',name:'听力训练',icon:'👂',type:'timer',timer:15,stars:2,note:'听力训练15分钟',records:[]},
       {id:'jump_rope',name:'跳绳',icon:'🏃',type:'timer',timer:30,stars:2,note:'跳绳30分钟',records:[]}
     ]
   },
